@@ -11,14 +11,12 @@ interface DeviceInfo {
 interface CpuInfo {
     name: string;
     base_freq_ghz: number;
-    boost_freq_ghz: number;
     cores: number;
     threads: number;
 }
 
 interface RamInfo {
     capacity_gb: number;
-    type: string;
     speed_mhz: number;
 }
 
@@ -137,14 +135,13 @@ export function DeviceInfo() {
                     <ComponentCard icon={<Cpu />} title="CPU">
                         <p className="text-lg font-semibold scroll-m-20 mt-2">{components.cpu.name}</p>
                         <div className="mt-1">
-                            <p>{components.cpu.base_freq_ghz}GHz ({components.cpu.boost_freq_ghz}GHz)</p>
+                            <p>{components.cpu.base_freq_ghz}GHz</p>
                             <p>{components.cpu.cores} Cores / {components.cpu.threads} Threads</p>
                         </div>
                     </ComponentCard>
                     <ComponentCard icon={<MemoryStick />} title="RAM">
                         <p className="text-lg font-semibold scroll-m-20 mt-2">{components.ram.capacity_gb}GB</p>
                         <div className="mt-1">
-                            <p>{components.ram.type}</p>
                             <p>{components.ram.speed_mhz}MHz</p>
                         </div>
                     </ComponentCard>

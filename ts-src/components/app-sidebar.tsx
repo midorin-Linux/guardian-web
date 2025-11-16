@@ -35,7 +35,7 @@ export function AppSidebar() {
             <SidebarHeader>
                 <div className="w-full flex items-center gap-2 p-1.5">
                     <Computer className="bg-black text-white p-1.5 items-center justify-center my-auto w-8 h-8 rounded-lg" />
-                    <span>192.168.100.11</span>
+                    <span>未設定</span>
                 </div>
             </SidebarHeader>
             <SidebarContent>

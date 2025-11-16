@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct DeviceInfo {
@@ -18,8 +18,6 @@ pub struct CpuSpec {
 #[derive(Serialize)]
 pub struct RamSpec {
     pub capacity_gb: f64,
-    #[serde(rename = "type")]
-    pub ram_type: String,
     pub speed_mhz: u32,
 }
 
