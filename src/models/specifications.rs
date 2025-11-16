@@ -10,7 +10,6 @@ pub struct DeviceInfo {
 pub struct CpuSpec {
     pub name: String,
     pub base_freq_ghz: f32,
-    pub boost_freq_ghz: f32,
     pub cores: u32,
     pub threads: u32,
 }

@@ -1,12 +1,10 @@
 use crate::models::specifications::{CpuSpec, DeviceInfo, FullSpec, GpuSpec, RamSpec, StorageSpec};
 
-use anyhow::Result;
-use axum::{extract::Path, http::StatusCode, response::{IntoResponse, Json}};
+use axum::{response::{IntoResponse, Json}};
 use gfxinfo::active_gpu;
-use hardware_query::{HardwareInfo};
+use hardware_query::HardwareInfo;
 use sysinfo::{Disks, System};
 
-/// ハードコードされた完全なスペック情報をJSONで返すハンドラ
 pub async fn get_full_spec() -> impl IntoResponse {
     let disks = Disks::new_with_refreshed_list();
     let mut sys = System::new_all();
@@ -22,7 +20,6 @@ pub async fn get_full_spec() -> impl IntoResponse {
     let cpu = CpuSpec {
         name: hw_info.cpu.model_name,
         base_freq_ghz: format!("{:.1}", hw_info.cpu.base_frequency as f64 / 1000.0).parse().unwrap_or(0.0),
-        boost_freq_ghz: format!("{:.1}", hw_info.cpu.base_frequency as f64 / 1000.0 + 0.5).parse().unwrap_or(0.0), // 仮の値
         cores: hw_info.cpu.physical_cores,
         threads: hw_info.cpu.logical_cores,
     };

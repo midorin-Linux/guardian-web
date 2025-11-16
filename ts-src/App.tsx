@@ -32,7 +32,7 @@ export default function App() {
                 <main className="w-full bg-white">
                     <div>
                         <Header />
-                        <div className="mx-auto px-5 pt-14">
+                        <div className="mx-auto px-5 pt-14 pb-4">
                             <Routes>
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/info" element={<DeviceInfo />} />

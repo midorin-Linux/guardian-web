@@ -158,7 +158,7 @@ export function DeviceInfo() {
                     <ComponentCard icon={<Gpu />} title="GPU">
                         <p className="text-lg font-semibold scroll-m-20 mt-2" title={components.gpu.name}>{components.gpu.name}</p>
                         <div className="mt-1">
-                            <p>{components.gpu.vram_gb}GB</p>
+                            <p>{components.gpu.vram_gb.toFixed(1)}GB</p>
                         </div>
                     </ComponentCard>
                 </div>

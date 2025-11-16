@@ -12,6 +12,7 @@ chrono = { version = "0.4.42", features = ["serde"] }
 config = "0.15.18"
 dialoguer = "0.12.0"
 dotenvy = "0.15.7"
+futures = "0.3.31"
 gfxinfo = { version = "0.1.2", features = ["gpu_info"] }
 hardware-query = "0.2.1"
 hyper = { version = "1.8.0", features = ["full"] }
@@ -28,6 +29,7 @@ thiserror = "2.0.17"
 tokio = { version = "1.48.0", features = ["full"] }
 tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"] }
+tokio-stream = "0.1.17"
 tower-http = { version = "0.6.6", features = ["fs", "timeout", "trace"] }
 url = "2.5.7"
 uuid = { version = "1.18.1", features = ["v4"] }

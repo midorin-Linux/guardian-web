@@ -1,5 +1,5 @@
 use crate::app::{config::Config, shutdown::shutdown_signal};
-use crate::handles::specifications;
+use crate::handles::{specifications, stream_monitor};
 use std::{
     net::{Ipv4Addr, SocketAddr},
     time::Duration,
@@ -46,6 +46,8 @@ impl App {
                 TimeoutLayer::new(Duration::from_secs(10)),
             ))
             .route("/api/device-components", get(specifications::get_full_spec))
+            .route("/api/monitor/stream", get(stream_monitor::sse_handler))
+            // React側でのルーティングを許可する
             .nest_service("/info", ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")))
             .nest_service("/monitor", ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")))
             .fallback_service(ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")));
