@@ -8,7 +8,7 @@ use std::{
 use anyhow::{Context, Result};
 use axum::{
     Router,
-    extract::{FromRef, FromRequestParts, State},
+    extract::{FromRequestParts, State},
     http::{StatusCode, request::Parts},
     middleware as axum_middleware,
     response::{Html, IntoResponse, Json, Response},
@@ -18,7 +18,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use owo_colors::OwoColorize;
 use tokio::net::TcpListener;
 use tower_http::{services::ServeDir, timeout::TimeoutLayer, trace::TraceLayer};
-use tracing::{debug, error, info, instrument, warn};
+use tracing::info;
 
 pub struct App {
     port: u16,
@@ -34,8 +34,7 @@ impl App {
         let pb = ProgressBar::new_spinner();
         pb.enable_steady_tick(Duration::from_millis(100));
         pb.set_style(
-            ProgressStyle::with_template("{spinner} {msg}")
-                .unwrap()
+            ProgressStyle::with_template("{spinner} {msg}")?
                 .tick_strings(&["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]),
         );
         pb.set_message("Starting...");
