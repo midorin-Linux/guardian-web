@@ -6,12 +6,7 @@ use hardware_query::HardwareInfo;
 use sysinfo::{Disks, System};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
-pub struct ComponentQuery {
-    device: Option<String>,
-}
-
-pub async fn get_full_spec(query: Option<Query<ComponentQuery>>) -> impl IntoResponse {
+pub async fn get_full_spec() -> impl IntoResponse {
     let disks = Disks::new_with_refreshed_list();
     let mut sys = System::new_all();
     sys.refresh_all();
@@ -58,29 +53,7 @@ pub async fn get_full_spec(query: Option<Query<ComponentQuery>>) -> impl IntoRes
             .unwrap_or(0.0),
     };
 
-    let spec = match query {
-        Some(Query(ComponentQuery { device: Some(component) })) => {
-            match component.as_str() {
-                "cpu" => Json(cpu).into_response(),
-                _ => Json(FullSpec {
-                    device,
-                    cpu,
-                    ram,
-                    storage,
-                    gpu,
-                })
-                    .into_response(),
-            }
-        }
-        _ => Json(FullSpec {
-            device,
-            cpu,
-            ram,
-            storage,
-            gpu,
-        })
-            .into_response(),
-    };
+    let spec = Json(FullSpec { device, cpu, ram, storage, gpu });
 
     spec
 }
