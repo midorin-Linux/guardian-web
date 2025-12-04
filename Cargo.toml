@@ -13,8 +13,6 @@ config = "0.15.18"
 dialoguer = "0.12.0"
 dotenvy = "0.15.7"
 futures = "0.3.31"
-gfxinfo = { version = "0.1.2", features = ["gpu_info"] }
-hardware-query = "0.2.1"
 hyper = { version = "1.8.0", features = ["full"] }
 indicatif = "0.18.2"
 owo-colors = "4.2.3"
@@ -33,3 +31,4 @@ tokio-stream = "0.1.17"
 tower-http = { version = "0.6.6", features = ["fs", "timeout", "trace"] }
 url = "2.5.7"
 uuid = { version = "1.18.1", features = ["v4"] }
+wgpu = "27.0.1"
