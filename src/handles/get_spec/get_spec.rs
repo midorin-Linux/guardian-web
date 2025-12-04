@@ -1,8 +1,8 @@
-use crate::handles::get_spec::{cpu::get_cpu_info, device::get_device_info, memory::get_memory_info};
-use crate::models::specifications::{CpuSpec, DeviceInfo, FullSpec, GpuSpec, RamSpec, StorageSpec};
+use crate::handles::get_spec::{cpu::get_cpu_info, device::get_device_info, gpu::get_gpu_info, memory::get_memory_info, storage::get_storage_info};
+use crate::models::specifications::{CpuSpec, DeviceInfo, GpuSpec, RamSpec, StorageSpec};
 
 use anyhow::{Context, Result};
-use wgpu::{Backends, Instance};
+use wgpu::Instance;
 use sysinfo::{Disks, System};
 
 pub struct GetSpec{
@@ -50,26 +50,16 @@ impl GetSpec{
     }
     
     pub async fn storage(&mut self) -> Result<Vec<StorageSpec>> {
-        let storage = self.disks
-            .iter()
-            .map(|disk| StorageSpec {
-                model: disk.mount_point().to_string_lossy().to_string(),
-                capacity_gb: disk.total_space() / 1024 / 1024 / 1024,
-            })
-            .collect::<Vec<StorageSpec>>();
-        Ok(storage)
+        match get_storage_info(&self.disks).await {
+            Ok(storages) => Ok(storages),
+            Err(e) => Err(e),
+        }
     }
     
     pub async fn gpu(&mut self) -> Result<GpuSpec> {
-        let gpu = GpuSpec {
-            name: self.gpu.enumerate_adapters(Backends::all()).first().unwrap().get_info().name.to_string(),
-            vram_gb: format!(
-                "{:.1}",
-                self.gpu.enumerate_adapters(Backends::all()).iter().next().unwrap().get_info().device / 1024
-            )
-                .parse()
-                .unwrap_or(0.0),
-        };
-        Ok(gpu)
+        match get_gpu_info(&self.gpu).await {
+            Ok(gpu) => Ok(gpu),
+            Err(e) => Err(e),
+        }
     }
 }
