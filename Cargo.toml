@@ -6,29 +6,26 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.100"
 askama = "0.14.0"
-axum = "0.8.6"
-bytes = "1.10.1"
+axum = "0.8.7"
+bytes = "1.11.0"
 chrono = { version = "0.4.42", features = ["serde"] }
-config = "0.15.18"
+config = "0.15.19"
 dialoguer = "0.12.0"
 dotenvy = "0.15.7"
 futures = "0.3.31"
-hyper = { version = "1.8.0", features = ["full"] }
-indicatif = "0.18.2"
+hyper = { version = "1.8.1", features = ["full"] }
+indicatif = "0.18.3"
 owo-colors = "4.2.3"
 regex = "1.12.2"
 reqwest = { version = "0.12.24", features = ["json"] }
-rustls = "0.23.35"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
-sqlx = { version = "0.8.6", features = ["runtime-tokio-rustls", "sqlite", "chrono"] }
 sysinfo = "0.37.2"
 thiserror = "2.0.17"
 tokio = { version = "1.48.0", features = ["full"] }
 tracing = "0.1.41"
-tracing-subscriber = { version = "0.3.20", features = ["env-filter", "fmt"] }
+tracing-subscriber = { version = "0.3.22", features = ["env-filter", "fmt"] }
 tokio-stream = "0.1.17"
-tower-http = { version = "0.6.6", features = ["fs", "timeout", "trace"] }
-url = "2.5.7"
-uuid = { version = "1.18.1", features = ["v4"] }
+tower-http = { version = "0.6.7", features = ["fs", "timeout", "trace"] }
+uuid = { version = "1.19.0", features = ["v4"] }
 wgpu = "27.0.1"
