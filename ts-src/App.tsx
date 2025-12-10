@@ -3,11 +3,13 @@ import { AppSidebar } from "@/components/app-sidebar"
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Dashboard } from "@/components/dashboard.tsx";
+import { ServerList } from "@/components/server-list.tsx";
 import { DeviceInfo } from "@/components/device_info.tsx";
 import { Monitor } from "@/components/monitor.tsx";
 
 const pageTitles: { [key: string]: string } = {
     '/': 'Dashboard',
+    'list': 'Server List',
     '/info': 'Device Info',
     '/monitor': 'Monitor'
 };
@@ -35,6 +37,7 @@ export default function App() {
                         <div className="mx-auto px-5 pt-14 pb-4">
                             <Routes>
                                 <Route path="/" element={<Dashboard />} />
+                                <Route path="/list" element={<ServerList />} />
                                 <Route path="/info" element={<DeviceInfo />} />
                                 <Route path="/monitor" element={<Monitor />} />
                             </Routes>

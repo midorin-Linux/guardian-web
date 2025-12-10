@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 
 #Rust
-target
+/target
+guardian.db
+identifier.sqlite
