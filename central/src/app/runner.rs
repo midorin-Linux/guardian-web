@@ -8,7 +8,7 @@ use std::{
 use anyhow::{Context, Result};
 use axum::{
     Router,
-    routing::{get, post},
+    routing::get,
     http::StatusCode,
 };
 use indicatif::{ProgressBar, ProgressStyle};
@@ -44,14 +44,23 @@ impl App {
             .await
             .context("failed to connect to database")?;
 
+        let spa_service = ServeDir::new("./static")
+            .not_found_service(tower_http::services::ServeFile::new("./static/index.html"));
+
+        let api_router = Router::new()
+            .route("/servers",
+                   get(crate::handles::servers::get_servers_list::get_servers_list)
+                       .post(crate::handles::servers::register_server::register_server)
+            )
+            .route("/servers/{id}",
+                   get(crate::handles::servers::get_server_info::get_server_info)
+                       .put(crate::handles::servers::edit_server_info::edit_server_info)
+                       .delete(crate::handles::servers::delete_server::delete_server)
+            );
+
         let app = Router::new()
-            .route("/api/register", post(crate::handles::register::server_register))
-            .route("/api/server-list", get(crate::handles::server_list::find_server_list))
-            // React側でのルーティングを許可する
-            .nest_service("/info", ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")))
-            .nest_service("/list", ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")))
-            .nest_service("/monitor", ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")))
-            .fallback_service(ServeDir::new("./static").append_index_html_on_directories(true).not_found_service(ServeDir::new("./static")))
+            .nest("/api/v1", api_router)
+            .fallback_service(spa_service)
             .layer((
                 TraceLayer::new_for_http(),
                 TimeoutLayer::with_status_code(StatusCode::REQUEST_TIMEOUT, Duration::from_secs(10)),

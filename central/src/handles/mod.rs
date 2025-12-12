@@ -1,2 +1,1 @@
-pub mod register;
-pub mod server_list;
+pub mod servers;
