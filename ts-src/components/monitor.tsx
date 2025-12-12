@@ -1,4 +1,3 @@
-
 import { useSSE } from "@/hooks/use-sse.ts";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from 'recharts';
 import { useState, useEffect } from 'react';

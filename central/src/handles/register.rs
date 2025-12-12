@@ -55,13 +55,12 @@ pub async fn server_register(
         Ok(Some(_)) => {
             tracing::info!("Server registration endpoint accessed");
 
-            let ip = format!("{}:{}", json.server_address, json.port);
-
             let result = sqlx::query(
-                r#"INSERT INTO servers (name, address) VALUES (?, ?)"#,
+                r#"INSERT INTO servers (name, address, port) VALUES (?, ?, ?)"#,
             )
                 .bind(json.server_name)
-                .bind(ip)
+                .bind(json.server_address)
+                .bind(json.port)
                 .execute(&mut *conn)
                 .await;
 
