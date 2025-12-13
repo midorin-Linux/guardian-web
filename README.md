@@ -19,12 +19,12 @@ React用の配信用ファイルの置き場所
 
 ## 実行方法
 - **Agentの実行**
-```aiexclude
+```bush
 cargo run -p agent
 ```
 
 - **Centralの実行**
-```aiexclude
+```bush
 sqlx database create
 sqlx migrate run
 cargo run -p central
