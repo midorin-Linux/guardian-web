@@ -1,4 +1,3 @@
-
 use crate::app::{config::Config, shutdown::shutdown_signal};
 use std::{
     net::{Ipv4Addr, SocketAddr},
@@ -49,13 +48,13 @@ impl App {
 
         let api_router = Router::new()
             .route("/servers",
-                   get(crate::handles::servers::get_servers_list::get_servers_list)
-                       .post(crate::handles::servers::register_server::register_server)
+                   get(crate::handles::list::get_servers_list::get_servers_list)
+                       .post(crate::handles::list::register_server::register_server)
             )
             .route("/servers/{id}",
-                   get(crate::handles::servers::get_server_info::get_server_info)
-                       .put(crate::handles::servers::edit_server_info::edit_server_info)
-                       .delete(crate::handles::servers::delete_server::delete_server)
+                   get(crate::handles::list::get_server_info::get_server_info)
+                       .put(crate::handles::list::edit_server_info::edit_server_info)
+                       .delete(crate::handles::list::delete_server::delete_server)
             );
 
         let app = Router::new()
@@ -82,5 +81,3 @@ impl App {
         Ok(())
     }
 }
-
-pub struct DatabaseConnection(pub sqlx::pool::PoolConnection<sqlx::Sqlite>);
