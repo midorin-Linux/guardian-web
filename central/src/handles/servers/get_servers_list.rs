@@ -1,4 +1,4 @@
-use common::servers::Information::ServerInformation;
+use common::central::information::ServerInformation;
 
 use axum::{
     extract::State,

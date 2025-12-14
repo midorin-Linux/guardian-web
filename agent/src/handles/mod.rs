@@ -1,3 +1,2 @@
-pub mod monitor;
-pub mod spec;
-mod get_spec;
+pub mod metrics;
+pub mod info;
