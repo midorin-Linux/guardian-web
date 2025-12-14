@@ -24,8 +24,10 @@ dist-ssr
 *.sw?
 
 #Rust
-/target
+target
+agent/target
+central/target
+common/target
 guardian.db
 guardian.db-shm
 guardian.db-wal
-identifier.sqlite
