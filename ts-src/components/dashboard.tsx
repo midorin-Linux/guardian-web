@@ -3,8 +3,15 @@ import { Server, ListCheck } from 'lucide-react'
 import { useState, useEffect, type ReactNode } from 'react';
 
 interface ServerInfo {
-    server_name: string,
-    server_address: string,
+    id: string,
+    hostname: string,
+    ip_address: string,
+    os_type: string,
+    tags: string | null,
+    auth_profile_id: string,
+    port: number,
+    bastion_server_id: string | null,
+    wol_mac_address: string | null,
 }
 
 interface ComponentCardProps {
@@ -39,7 +46,7 @@ export function Dashboard() {
     useEffect(() => {
         const fetchDeviceComponents = async () => {
             try {
-                const response = await fetch('/api/server-list');
+                const response = await fetch('/api/v1/servers');
                 if (!response.ok) {
                     throw new Error('Failed to fetch device components');
                 }
@@ -72,18 +79,18 @@ export function Dashboard() {
         <>
             <div className="scroll-m-20">
                 <ComponentCard icon={<ListCheck />} title={"稼働率"}>
-                    <p className="text-lg font-semibold scroll-m-20 mt-2">100%</p>
+                    <p className="text-lg font-semibold scroll-m-20 mt-2">?%</p>
                     <div className="mt-1">
-                        <p>2/2 台が稼働中です</p>
+                        <p>?/? 台が稼働中です</p>
                     </div>
                 </ComponentCard>
                 <hr className="my-2" />
                 <div className="grid grid-cols-subgrid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {components.map((info) => (
-                        <ComponentCard icon={<Server />} title={info.server_address}>
-                            <p className="text-lg font-semibold scroll-m-20 mt-2">{info.server_name}</p>
+                        <ComponentCard icon={<Server />} title={info.hostname}>
+                            <p className="text-lg font-semibold scroll-m-20 mt-2">{info.ip_address}</p>
                             <div className="mt-1">
-                                <p>ここにサーバーの詳しい状況</p>
+                                <p>{info.id}</p>
                             </div>
                         </ComponentCard>
                     ))}

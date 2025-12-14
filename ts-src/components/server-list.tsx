@@ -29,8 +29,15 @@ import { Label } from "@/components/ui/label"
 import { useState, useEffect } from 'react';
 
 interface ServerInfo {
-    server_name: string,
-    server_address: string,
+    id: string,
+    hostname: string,
+    ip_address: string,
+    os_type: string,
+    tags: string | null,
+    auth_profile_id: string,
+    port: number,
+    bastion_server_id: string | null,
+    wol_mac_address: string | null,
 }
 
 interface DataTableProps<TData, TValue> {
@@ -40,12 +47,16 @@ interface DataTableProps<TData, TValue> {
 
 export const columns: ColumnDef<ServerInfo>[] = [
     {
-        accessorKey: "server_name",
-        header: "Server name",
+        accessorKey: "hostname",
+        header: "Hostname",
     },
     {
-        accessorKey: "server_address",
-        header: "Server address",
+        accessorKey: "ip_address",
+        header: "IP address",
+    },
+    {
+        accessorKey: "id",
+        header: "UUID",
     },
 ]
 
@@ -114,7 +125,7 @@ export function ServerList() {
     useEffect(() => {
         const fetchServerInformation = async () => {
             try {
-                const response = await fetch('/api/server-list');
+                const response = await fetch('/api/v1/servers');
                 if (!response.ok) {
                     throw new Error('Failed to fetch device components');
                 }
@@ -145,6 +156,7 @@ export function ServerList() {
 
     return (
         <>
+            <DataTable columns={columns} data={components} />
             <Dialog>
                 <form>
                     <DialogTrigger asChild>
@@ -154,20 +166,20 @@ export function ServerList() {
                         <DialogHeader>
                             <DialogTitle>Register server</DialogTitle>
                             <DialogDescription>
-                                Please enter the server name, server address, and port to register the server.
+                                Please enter the hostname, IP address, and port of ssh to register the server.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4">
                             <div className="grid gap-3">
-                                <Label htmlFor="name-1">Server name</Label>
-                                <Input id="name-1" name="name" />
+                                <Label htmlFor="name-1">Hostname</Label>
+                                <Input id="name-1" name="hostname" />
                             </div>
                             <div className="grid gap-3">
-                                <Label htmlFor="username-1">Server address</Label>
-                                <Input id="username-1" name="address" />
+                                <Label htmlFor="username-1">IP address</Label>
+                                <Input id="username-1" name="ip_address" />
                             </div>
                             <div className="grid gap-3">
-                                <Label htmlFor="username-1">Port</Label>
+                                <Label htmlFor="username-1">SSH port</Label>
                                 <Input id="username-1" name="port" />
                             </div>
                         </div>
@@ -180,7 +192,6 @@ export function ServerList() {
                     </DialogContent>
                 </form>
             </Dialog>
-            <DataTable columns={columns} data={components} />
         </>
     );
 }
