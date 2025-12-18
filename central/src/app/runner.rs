@@ -55,7 +55,8 @@ impl App {
                    get(crate::handles::list::get_server_info::get_server_info)
                        .put(crate::handles::list::edit_server_info::edit_server_info)
                        .delete(crate::handles::list::delete_server::delete_server)
-            );
+            )
+            .route("/servers/{id}/specs", get(crate::handles::manage::specs::get_server_specs));
 
         let app = Router::new()
             .nest("/api/v1", api_router)
