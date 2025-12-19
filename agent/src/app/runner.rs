@@ -40,6 +40,7 @@ impl App {
         pb.set_message("Starting...");
 
         let api_router = Router::new()
+            .route("/health", get(StatusCode::OK))
             .route("/metrics", get(crate::handles::metrics::sse_handler))
             .route("/info", get(crate::handles::info::get_server_information));
 
@@ -52,7 +53,7 @@ impl App {
             ));
 
         let listener =
-            TcpListener::bind(SocketAddr::from((Ipv4Addr::UNSPECIFIED, self.config.port.clone()))).await?;
+            TcpListener::bind(SocketAddr::from((Ipv4Addr::UNSPECIFIED, self.config.server.port.clone()))).await?;
 
         pb.finish_and_clear();
         println!("{}", format!("{} Ready!\n", "✔".green()));

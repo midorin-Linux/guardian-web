@@ -10,6 +10,7 @@ use axum::{
     routing::get,
     http::StatusCode,
 };
+use axum::response::IntoResponse;
 use indicatif::{ProgressBar, ProgressStyle};
 use owo_colors::OwoColorize;
 use sqlx::sqlite::SqlitePoolOptions;
@@ -68,7 +69,7 @@ impl App {
             .with_state(pool);
 
         let listener =
-            TcpListener::bind(SocketAddr::from((Ipv4Addr::UNSPECIFIED, self.config.port.clone()))).await?;
+            TcpListener::bind(SocketAddr::from((Ipv4Addr::UNSPECIFIED, self.config.server.port.clone()))).await?;
 
         pb.finish_and_clear();
         println!("{}", format!("{} Ready!\n", "✔".green()));

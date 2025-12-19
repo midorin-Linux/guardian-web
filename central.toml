@@ -1,3 +1,2 @@
 [server]
-port = 3000
-DATABASE_URL = "sqlite:./guardian.db"
+bind_port = 3000

@@ -11,9 +11,23 @@ fn default_log_level() -> String {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct Config {
-    #[serde(rename = "bind_port", default = "default_bind_port")]
+pub struct ServerConfig {
+    #[serde(default = "default_bind_port")]
     pub port: u16,
+}
+
+impl Default for ServerConfig {
+    fn default() -> Self {
+        Self {
+            port: default_bind_port(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Config {
+    #[serde(default)]
+    pub server: ServerConfig,
 
     #[serde(rename = "log_level", default = "default_log_level")]
     pub log_level: String,
@@ -34,7 +48,7 @@ impl Config {
                     .required(false)
                     .format(config::FileFormat::Toml),
             )
-            .add_source(Environment::default())
+            .add_source(Environment::default().separator("__"))
             .build()?;
 
         config.try_deserialize()
