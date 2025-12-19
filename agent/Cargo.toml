@@ -10,6 +10,7 @@ axum = "0.8.7"
 config = "0.15.19"
 dotenvy = "0.15.7"
 futures = "0.3.31"
+hyper = { version = "1.8.1", features = ["full"] }
 indicatif = "0.18.3"
 owo-colors = "4.2.3"
 serde = { version = "1.0.228", features = ["derive"] }

@@ -12,6 +12,7 @@ dependencies = [
  "config",
  "dotenvy",
  "futures",
+ "hyper",
  "indicatif",
  "owo-colors",
  "serde",
