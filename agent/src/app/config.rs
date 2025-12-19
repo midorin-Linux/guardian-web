@@ -30,7 +30,7 @@ impl Config {
                     .required(false),
             )
             .add_source(
-                File::with_name("settings.toml")
+                File::with_name("agent.toml")
                     .required(false)
                     .format(config::FileFormat::Toml),
             )

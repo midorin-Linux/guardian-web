@@ -3,7 +3,7 @@ use config::{Config as ConfigBuilder, ConfigError, Environment, File};
 use serde::Deserialize;
 
 fn default_bind_port() -> u16 {
-    8080
+    3000
 }
 fn default_database_url() -> String {
     "sqlite:./guardian.db".to_string()
@@ -36,7 +36,7 @@ impl Config {
                     .required(false),
             )
             .add_source(
-                File::with_name("settings.toml")
+                File::with_name("central.toml")
                     .required(false)
                     .format(config::FileFormat::Toml),
             )
