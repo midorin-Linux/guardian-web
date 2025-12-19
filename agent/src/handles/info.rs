@@ -68,12 +68,11 @@ async fn get_disk_information() -> Result<Vec<Disk>> {
 // ToDo: 正確な値を返せるようにする
 async fn get_gpu_information() -> Result<Vec<Gpu>> {
     let instance = Instance::new(&wgpu::InstanceDescriptor {
-        backends: Backends::all(),
+        backends: Backends::PRIMARY,
         ..Default::default()
     });
-
-    let gpu = instance.enumerate_adapters(Backends::all())
-        .iter()
+    let gpu = instance.enumerate_adapters(Backends::PRIMARY)
+        .await.iter()
         .map(|gpu| Gpu {
             name: gpu.get_info().name,
             video_ram_mb: gpu.get_info().device,

@@ -90,7 +90,7 @@ export function Dashboard() {
                         <ComponentCard icon={<Server />} title={info.hostname}>
                             <p className="text-lg font-semibold scroll-m-20 mt-2">{info.ip_address}</p>
                             <div className="mt-1">
-                                <p>{info.id}</p>
+                                <p>UUID: {info.id}</p>
                             </div>
                         </ComponentCard>
                     ))}
