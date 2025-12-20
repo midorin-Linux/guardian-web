@@ -4,14 +4,14 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Dashboard } from "@/components/dashboard.tsx";
 import { ServerList } from "@/components/server-list.tsx";
-import { DeviceInfo } from "@/components/device_info.tsx";
-import { Monitor } from "@/components/monitor.tsx";
+// import { DeviceInfo } from "@/components/device_info.tsx";
+// import { Monitor } from "@/components/monitor.tsx";
 
 const pageTitles: { [key: string]: string } = {
     '/': 'Dashboard',
     '/list': 'Server List',
-    '/info': 'Device Info',
-    '/monitor': 'Monitor'
+    // '/info': 'Device Info',
+    // '/monitor': 'Monitor'
 };
 
 const Header = () => {
@@ -38,8 +38,8 @@ export default function App() {
                             <Routes>
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/list" element={<ServerList />} />
-                                <Route path="/info" element={<DeviceInfo />} />
-                                <Route path="/monitor" element={<Monitor />} />
+                                {/*<Route path="/info" element={<DeviceInfo />} />*/}
+                                {/*<Route path="/monitor" element={<Monitor />} />*/}
                             </Routes>
                         </div>
                     </div>

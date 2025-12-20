@@ -57,6 +57,7 @@ impl App {
                        .put(crate::handles::list::edit_server_info::edit_server_info)
                        .delete(crate::handles::list::delete_server::delete_server)
             )
+            .route("/servers/{id}/health", get(crate::handles::manage::health::get_server_health))
             .route("/servers/{id}/specs", get(crate::handles::manage::specs::get_server_specs));
 
         let app = Router::new()

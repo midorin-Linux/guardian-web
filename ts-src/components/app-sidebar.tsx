@@ -1,4 +1,4 @@
-import { Activity, Computer, Home, List } from "lucide-react"
+import { Computer, Home, List } from "lucide-react"
 
 import {
     Sidebar,
@@ -22,16 +22,16 @@ const items = [
         url: "/list",
         icon: List,
     },
-    {
-        title: "Device Info",
-        url: "/info",
-        icon: Computer
-    },
-    {
-        title: "Monitor",
-        url: "/monitor",
-        icon: Activity
-    }
+    // {
+    //     title: "Device Info",
+    //     url: "/info",
+    //     icon: Computer
+    // },
+    // {
+    //     title: "Monitor",
+    //     url: "/monitor",
+    //     icon: Activity
+    // }
 ]
 
 export function AppSidebar() {

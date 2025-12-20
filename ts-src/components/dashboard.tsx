@@ -12,6 +12,7 @@ interface ServerInfo {
     port: number,
     bastion_server_id: string | null,
     wol_mac_address: string | null,
+    is_online?: boolean;
 }
 
 interface ComponentCardProps {
@@ -37,22 +38,28 @@ function ComponentCard({ icon, title, children }: ComponentCardProps) {
 }
 
 export function Dashboard() {
-    // 2. 状態管理（データ、ローディング、エラー）
     const [components, setComponents] = useState<ServerInfo[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // 3. データ取得処理
     useEffect(() => {
-        const fetchDeviceComponents = async () => {
+        const fetchAndCheckHealth = async () => {
             try {
                 const response = await fetch('/api/v1/servers');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch device components');
-                }
+                if (!response.ok) throw new Error('Failed to fetch device components');
                 const data: ServerInfo[] = await response.json();
 
-                setComponents(data);
+                const healthChecks = data.map(async (server) => {
+                    try {
+                        const res = await fetch(`/api/v1/servers/${server.id}/health`);
+                        return { ...server, is_online: res.ok };
+                    } catch {
+                        return { ...server, is_online: false };
+                    }
+                });
+
+                const results = await Promise.all(healthChecks);
+                setComponents(results);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
             } finally {
@@ -60,7 +67,7 @@ export function Dashboard() {
             }
         };
 
-        fetchDeviceComponents();
+        fetchAndCheckHealth();
     }, []);
 
     if (loading) {
@@ -75,13 +82,18 @@ export function Dashboard() {
         return <div>No component data available.</div>;
     }
 
+    const onlineCount = components.filter(c => c.is_online).length;
+    const uptimePercentage = components.length > 0
+        ? Math.round((onlineCount / components.length) * 100)
+        : 0;
+
     return (
         <>
             <div className="scroll-m-20">
                 <ComponentCard icon={<ListCheck />} title={"稼働率"}>
-                    <p className="text-lg font-semibold scroll-m-20 mt-2">?%</p>
+                    <p className="text-lg font-semibold scroll-m-20 mt-2">{uptimePercentage}%</p>
                     <div className="mt-1">
-                        <p>?/? 台が稼働中です</p>
+                        <p>{onlineCount}/{components.length} 台が稼働中です</p>
                     </div>
                 </ComponentCard>
                 <hr className="my-2" />

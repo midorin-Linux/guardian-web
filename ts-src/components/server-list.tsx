@@ -185,41 +185,43 @@ export function ServerList() {
     return (
         <>
             <DataTable columns={columns} data={components} />
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                    <Button variant="outline">Register server</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <form onSubmit={handleSubmit}>
-                        <DialogHeader>
-                            <DialogTitle>Register server</DialogTitle>
-                            <DialogDescription>
-                                Please enter the hostname, IP address, and port of ssh to register the server.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <div className="grid gap-3">
-                                <Label htmlFor="name-1">Hostname</Label>
-                                <Input id="name-1" name="hostname" required />
+            <div className="mt-2 flex justify-end">
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant="outline">Register server</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                        <form onSubmit={handleSubmit}>
+                            <DialogHeader>
+                                <DialogTitle>Register server</DialogTitle>
+                                <DialogDescription>
+                                    Please enter the hostname, IP address, and port of ssh to register the server.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid gap-3">
+                                    <Label htmlFor="name-1">Hostname</Label>
+                                    <Input id="name-1" name="hostname" required />
+                                </div>
+                                <div className="grid gap-3">
+                                    <Label htmlFor="ip-address">IP address</Label>
+                                    <Input id="ip-address" name="ip_address" required />
+                                </div>
+                                <div className="grid gap-3">
+                                    <Label htmlFor="port">SSH port</Label>
+                                    <Input id="port" name="port" type="number" defaultValue="22" required />
+                                </div>
                             </div>
-                            <div className="grid gap-3">
-                                <Label htmlFor="ip-address">IP address</Label>
-                                <Input id="ip-address" name="ip_address" required />
-                            </div>
-                            <div className="grid gap-3">
-                                <Label htmlFor="port">SSH port</Label>
-                                <Input id="port" name="port" type="number" defaultValue="22" required />
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <DialogClose asChild>
-                                <Button type="button" variant="outline">Cancel</Button>
-                            </DialogClose>
-                            <Button type="submit">Save changes</Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button type="button" variant="outline">Cancel</Button>
+                                </DialogClose>
+                                <Button type="submit">Save changes</Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </>
     );
 }
