@@ -9,7 +9,7 @@ import { Monitor } from "@/components/monitor.tsx";
 
 const pageTitles: { [key: string]: string } = {
     '/': 'Dashboard',
-    'list': 'Server List',
+    '/list': 'Server List',
     '/info': 'Device Info',
     '/monitor': 'Monitor'
 };

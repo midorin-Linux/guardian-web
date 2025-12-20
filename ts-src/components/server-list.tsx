@@ -120,27 +120,55 @@ export function ServerList() {
     const [components, setComponents] = useState<ServerInfo[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [open, setOpen] = useState(false);
 
     // 3. データ取得処理
-    useEffect(() => {
-        const fetchServerInformation = async () => {
-            try {
-                const response = await fetch('/api/v1/servers');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch device components');
-                }
-                const data: ServerInfo[] = await response.json();
-
-                setComponents(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'An unknown error occurred');
-            } finally {
-                setLoading(false);
+    const fetchServerInformation = async () => {
+        try {
+            const response = await fetch('/api/v1/servers');
+            if (!response.ok) {
+                throw new Error('Failed to fetch device components');
             }
-        };
+            const data: ServerInfo[] = await response.json();
 
+            setComponents(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchServerInformation();
     }, []);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+
+        // ポート番号を数値に変換
+        const payload = {
+            ...data,
+            port: Number(data.port),
+        };
+
+        try {
+            const response = await fetch('/api/v1/servers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                await fetchServerInformation(); // リストを更新
+                setOpen(false); // ダイアログを閉じる
+            }
+        } catch (error) {
+            console.error('Failed to register server:', error);
+        }
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -157,40 +185,40 @@ export function ServerList() {
     return (
         <>
             <DataTable columns={columns} data={components} />
-            <Dialog>
-                <form>
-                    <DialogTrigger asChild>
-                        <Button variant="outline">Register server</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                    <Button variant="outline">Register server</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <form onSubmit={handleSubmit}>
                         <DialogHeader>
                             <DialogTitle>Register server</DialogTitle>
                             <DialogDescription>
                                 Please enter the hostname, IP address, and port of ssh to register the server.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="grid gap-4">
+                        <div className="grid gap-4 py-4">
                             <div className="grid gap-3">
                                 <Label htmlFor="name-1">Hostname</Label>
-                                <Input id="name-1" name="hostname" />
+                                <Input id="name-1" name="hostname" required />
                             </div>
                             <div className="grid gap-3">
-                                <Label htmlFor="username-1">IP address</Label>
-                                <Input id="username-1" name="ip_address" />
+                                <Label htmlFor="ip-address">IP address</Label>
+                                <Input id="ip-address" name="ip_address" required />
                             </div>
                             <div className="grid gap-3">
-                                <Label htmlFor="username-1">SSH port</Label>
-                                <Input id="username-1" name="port" />
+                                <Label htmlFor="port">SSH port</Label>
+                                <Input id="port" name="port" type="number" defaultValue="22" required />
                             </div>
                         </div>
                         <DialogFooter>
                             <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
+                                <Button type="button" variant="outline">Cancel</Button>
                             </DialogClose>
                             <Button type="submit">Save changes</Button>
                         </DialogFooter>
-                    </DialogContent>
-                </form>
+                    </form>
+                </DialogContent>
             </Dialog>
         </>
     );
