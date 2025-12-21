@@ -1,4 +1,4 @@
-import { Computer, Home, List } from "lucide-react"
+import { Computer } from "lucide-react"
 
 import {
     Sidebar,
@@ -10,29 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-
-const items = [
-    {
-        title: "Dashboard",
-        url: "/",
-        icon: Home,
-    },
-    {
-        title: "Server list",
-        url: "/list",
-        icon: List,
-    },
-    // {
-    //     title: "Device Info",
-    //     url: "/info",
-    //     icon: Computer
-    // },
-    // {
-    //     title: "Monitor",
-    //     url: "/monitor",
-    //     icon: Activity
-    // }
-]
+import { routes } from "@/lib/routes"
 
 export function AppSidebar() {
     return (
@@ -48,16 +26,18 @@ export function AppSidebar() {
                     <SidebarGroupLabel>Management Website</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon className="text-black hover:text-black" />
-                                            <span className="text-black hover:text-black">{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {routes
+                                .filter((route) => route.showInSidebar)
+                                .map((route) => (
+                                    <SidebarMenuItem key={route.path}>
+                                        <SidebarMenuButton asChild>
+                                            <a href={route.path}>
+                                                <route.icon className="text-black hover:text-black" />
+                                                <span className="text-black hover:text-black">{route.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
