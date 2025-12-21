@@ -116,13 +116,11 @@ export function DataTable<TData, TValue>({columns, data,}: DataTableProps<TData,
 }
 
 export function ServerList() {
-    // 2. 状態管理（データ、ローディング、エラー）
     const [components, setComponents] = useState<ServerInfo[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
 
-    // 3. データ取得処理
     const fetchServerInformation = async () => {
         try {
             const response = await fetch('/api/v1/servers');
@@ -148,7 +146,6 @@ export function ServerList() {
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
 
-        // ポート番号を数値に変換
         const payload = {
             ...data,
             port: Number(data.port),
@@ -162,8 +159,8 @@ export function ServerList() {
             });
 
             if (response.ok) {
-                await fetchServerInformation(); // リストを更新
-                setOpen(false); // ダイアログを閉じる
+                await fetchServerInformation();
+                setOpen(false);
             }
         } catch (error) {
             console.error('Failed to register server:', error);
@@ -188,7 +185,7 @@ export function ServerList() {
             <div className="mt-2 flex justify-end">
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="outline">Register server</Button>
+                        <Button>Register server</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <form onSubmit={handleSubmit}>

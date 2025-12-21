@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import {  type LucideIcon, Home, List } from 'lucide-react';
+import {  type LucideIcon, Home, List, Server } from 'lucide-react';
 import { Dashboard } from '@/components/dashboard';
 import { ServerList } from '@/components/server-list';
 // import { DeviceInfo } from '@/components/device_info';
@@ -26,6 +26,13 @@ export const routes: RouteConfig[] = [
         element: ServerList,
         title: 'Server List',
         icon: List,
+        showInSidebar: true,
+    },
+    {
+        path: '/servers',
+        element: ServerList,
+        title: 'Servers',
+        icon: Server,
         showInSidebar: true,
     },
     // {
