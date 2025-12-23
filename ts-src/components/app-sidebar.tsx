@@ -17,6 +17,63 @@ import {
 } from "@/components/ui/collapsible"
 // import { routes } from "@/lib/routes"
 import { Home, List, Server } from 'lucide-react';
+import {useEffect, useState} from "react";
+
+interface ServerInfo {
+    id: string,
+    hostname: string,
+    ip_address: string,
+    os_type: string,
+    tags: string | null,
+    auth_profile_id: string,
+    port: number,
+    bastion_server_id: string | null,
+    wol_mac_address: string | null,
+}
+
+function Servers() {
+    const [components, setComponents] = useState<ServerInfo[] | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchServerInformation = async () => {
+        try {
+            const response = await fetch('/api/v1/servers');
+            if (!response.ok) {
+                throw new Error('Failed to fetch device components');
+            }
+            const data: ServerInfo[] = await response.json();
+
+            setComponents(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchServerInformation();
+    }, []);
+
+    if (loading) {
+        return "Loading...";
+    }
+
+    if (error) {
+        return `Error: ${error}`;
+    }
+
+    if (!components) {
+        return "No component data available.";
+    }
+
+    return (
+        components.map((info) => {
+            return <SidebarMenuSubItem>{info.hostname}</SidebarMenuSubItem>
+        })
+    )
+}
 
 export function AppSidebar() {
     return (
@@ -71,8 +128,7 @@ export function AppSidebar() {
                                     </CollapsibleTrigger>
                                     <CollapsibleContent>
                                         <SidebarMenuSub>
-                                            {/*ToDo: データを取得して表示する*/}
-                                            <SidebarMenuSubItem>192.168.100.2</SidebarMenuSubItem>
+                                            <Servers />
                                         </SidebarMenuSub>
                                     </CollapsibleContent>
                                 </SidebarMenuItem>
