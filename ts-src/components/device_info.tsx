@@ -1,42 +1,43 @@
 import { Cpu, Gpu, HardDrive, Info, MemoryStick } from 'lucide-react'
 
 import { useState, useEffect, type ReactNode } from 'react';
+import { useParams } from "react-router-dom";
 
 interface DeviceInfo {
     hostname: string;
+    kernel: string;
     os: string;
-    kernel_version: string;
 }
 
 interface CpuInfo {
-    name: string;
-    base_freq_ghz: number;
+    base_freq_mhz: number;
     cores: number;
+    name: string;
     threads: number;
 }
 
 interface RamInfo {
-    capacity_gb: number;
-    speed_mhz: number;
+    total_bytes: number;
 }
 
 interface StorageDevice {
-    model: string;
-    capacity_gb: number;
-    type: string;
+    device: string;
+    mount: string;
+    total_bytes: number;
 }
 
 interface GpuInfo {
+    driver_version: string;
     name: string;
-    vram_gb: number;
+    video_ram_mb: number;
 }
 
 interface DeviceComponents {
     device: DeviceInfo;
     cpu: CpuInfo;
-    ram: RamInfo;
-    storage: StorageDevice[];
-    gpu: GpuInfo;
+    memory: RamInfo;
+    disk: StorageDevice[];
+    gpu: GpuInfo[];
 }
 
 interface ComponentCardProps {
@@ -62,48 +63,20 @@ function ComponentCard({ icon, title, children }: ComponentCardProps) {
 }
 
 export function DeviceInfo() {
-    // 2. 状態管理（データ、ローディング、エラー）
+    const { serverId } = useParams<{ serverId: string }>();
+
     const [components, setComponents] = useState<DeviceComponents | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // 3. データ取得処理
     useEffect(() => {
         const fetchDeviceComponents = async () => {
             try {
-                const response = await fetch('/api/device-components');
+                const response = await fetch('/api/v1/servers/' + serverId + '/specs');
                 if (!response.ok) {
                     throw new Error('Failed to fetch device components');
                 }
                 const data: DeviceComponents = await response.json();
-
-                // const data: DeviceComponents = {
-                //     "device": {
-                //         "hostname": "DESKTOP",
-                //         "os": "Windows 11 Pro",
-                //         "kernel_version": "28000"
-                //     },
-                //     "cpu": {
-                //         "name": "Intel 114514",
-                //         "base_freq_ghz": 2.5,
-                //         "boost_freq_ghz": 3.1,
-                //         "cores": 4,
-                //         "threads": 8
-                //     },
-                //     "ram": {
-                //         "capacity_gb": 16,
-                //         "type": "DDR4",
-                //         "speed_mhz": 3200
-                //     },
-                //     "storage": [
-                //         { "model": "sandisk", "capacity_gb": 256, "type": "HDD" },
-                //         { "model": "western digital", "capacity_gb": 512, "type": "SSD" }
-                //     ],
-                //     "gpu": {
-                //         "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
-                //         "vram_gb": 96
-                //     }
-                // };
 
                 setComponents(data);
             } catch (err) {
@@ -135,32 +108,31 @@ export function DeviceInfo() {
                     <ComponentCard icon={<Cpu />} title="CPU">
                         <p className="text-lg font-semibold scroll-m-20 mt-2">{components.cpu.name}</p>
                         <div className="mt-1">
-                            <p>{components.cpu.base_freq_ghz}GHz</p>
+                            <p>{components.cpu.base_freq_mhz / 1000}GHz</p>
                             <p>{components.cpu.cores} Cores / {components.cpu.threads} Threads</p>
                         </div>
                     </ComponentCard>
                     <ComponentCard icon={<MemoryStick />} title="RAM">
-                        <p className="text-lg font-semibold scroll-m-20 mt-2">{components.ram.capacity_gb}GB</p>
-                        <div className="mt-1">
-                            <p>{components.ram.speed_mhz}MHz</p>
-                        </div>
+                        <p className="text-lg font-semibold scroll-m-20 mt-2">{components.memory.total_bytes / 1024 / 1024 / 1024}GB</p>
                     </ComponentCard>
                     <ComponentCard icon={<HardDrive />} title="Storage">
                         <p className="text-lg font-semibold scroll-m-20 mt-2">
-                            {components.storage.reduce((acc, dev) => acc + dev.capacity_gb, 0)}GB
+                            {components.disk.reduce((acc, dev) => acc + dev.device, '')}
                         </p>
                         <div className="mt-1">
-                            {components.storage.map((disk, index) => (
-                                <p key={index}>{disk.model} ({disk.capacity_gb}GB)</p>
+                            {components.disk.map((disk, index) => (
+                                <p key={index}>{disk.mount} ({disk.total_bytes / 1024 / 1024 / 1024}GB)</p>
                             ))}
                         </div>
                     </ComponentCard>
-                    <ComponentCard icon={<Gpu />} title="GPU">
-                        <p className="text-lg font-semibold scroll-m-20 mt-2" title={components.gpu.name}>{components.gpu.name}</p>
-                        <div className="mt-1">
-                            <p>{components.gpu.vram_gb.toFixed(1)}GB</p>
-                        </div>
-                    </ComponentCard>
+                    {components.gpu.map((gpu) => (
+                        <ComponentCard icon={<Gpu />} title="GPU">
+                            <p className="text-lg font-semibold scroll-m-20 mt-2" title={gpu.name}>{gpu.name}</p>
+                            <div className="mt-1">
+                                <p>{gpu.video_ram_mb / 1024 / 1024}GB</p>
+                            </div>
+                        </ComponentCard>
+                    ))}
                 </div>
                 <div className="rounded border bg-white pl-4 py-2 text-sm mt-5">
                     <p>{components.device.hostname}</p>
@@ -175,7 +147,7 @@ export function DeviceInfo() {
                             <div className="flex flex-col">
                                 <div className="flex"><span className="w-32">Device Name</span><span className="font-medium">{components.device.hostname}</span></div>
                                 <div className="flex"><span className="w-32">Processor</span><span className="font-medium">{components.cpu.name}</span></div>
-                                <div className="flex"><span className="w-32">RAM</span><span className="font-medium">{components.ram.capacity_gb}GB</span></div>
+                                <div className="flex"><span className="w-32">RAM</span><span className="font-medium">{components.memory.total_bytes / 1024 / 1024 / 1024}GB</span></div>
                             </div>
                         </div>
                     </div>
@@ -191,7 +163,7 @@ export function DeviceInfo() {
                         <div className="flex items-center bg-white p-2">
                             <div className="flex flex-col">
                                 <div className="flex"><span className="w-32">OS</span><span className="font-medium">{components.device.os}</span></div>
-                                <div className="flex"><span className="w-32">Kernel Version</span><span className="font-medium">{components.device.kernel_version}</span></div>
+                                <div className="flex"><span className="w-32">Kernel Version</span><span className="font-medium">{components.device.kernel}</span></div>
                             </div>
                         </div>
                     </div>

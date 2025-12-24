@@ -1,12 +1,12 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, matchPath } from 'react-router-dom';
 import { routes } from '@/lib/routes';
 
 const Header = () => {
     const location = useLocation();
-    const currentRoute = routes.find(route => route.path === location.pathname);
+    const currentRoute = routes.find(route => matchPath(route.path, location.pathname));
     const title = currentRoute?.title || 'Dashboard';
 
     return (

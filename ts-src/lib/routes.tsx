@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 import {  type LucideIcon, Home, List, Server } from 'lucide-react';
 import { Dashboard } from '@/components/dashboard';
 import { ServerList } from '@/components/server-list';
-// import { DeviceInfo } from '@/components/device_info';
+import { DeviceInfo } from '@/components/device_info';
 // import { Monitor } from '@/components/monitor';
 
 export interface RouteConfig {
@@ -34,6 +34,13 @@ export const routes: RouteConfig[] = [
         title: 'Servers',
         icon: Server,
         showInSidebar: true,
+    },
+    {
+        path: '/servers/:serverId',
+        element: DeviceInfo,
+        title: 'Server Details',
+        icon: Server,
+        showInSidebar: false,
     },
     // {
     //     path: '/info',

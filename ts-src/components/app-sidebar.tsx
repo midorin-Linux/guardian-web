@@ -70,7 +70,7 @@ function Servers() {
 
     return (
         components.map((info) => {
-            return <SidebarMenuSubItem>{info.hostname}</SidebarMenuSubItem>
+            return <SidebarMenuSubItem><a href={"/servers/" + info.id}>{info.hostname}</a></SidebarMenuSubItem>
         })
     )
 }
