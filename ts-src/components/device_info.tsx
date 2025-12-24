@@ -108,12 +108,12 @@ export function DeviceInfo() {
                     <ComponentCard icon={<Cpu />} title="CPU">
                         <p className="text-lg font-semibold scroll-m-20 mt-2">{components.cpu.name}</p>
                         <div className="mt-1">
-                            <p>{components.cpu.base_freq_mhz / 1000}GHz</p>
+                            <p>{(components.cpu.base_freq_mhz / 1000).toFixed(1)}GHz</p>
                             <p>{components.cpu.cores} Cores / {components.cpu.threads} Threads</p>
                         </div>
                     </ComponentCard>
                     <ComponentCard icon={<MemoryStick />} title="RAM">
-                        <p className="text-lg font-semibold scroll-m-20 mt-2">{components.memory.total_bytes / 1024 / 1024 / 1024}GB</p>
+                        <p className="text-lg font-semibold scroll-m-20 mt-2">{(components.memory.total_bytes / 1024 / 1024 / 1024).toFixed(1)}GB</p>
                     </ComponentCard>
                     <ComponentCard icon={<HardDrive />} title="Storage">
                         <p className="text-lg font-semibold scroll-m-20 mt-2">
@@ -121,7 +121,7 @@ export function DeviceInfo() {
                         </p>
                         <div className="mt-1">
                             {components.disk.map((disk, index) => (
-                                <p key={index}>{disk.mount} ({disk.total_bytes / 1024 / 1024 / 1024}GB)</p>
+                                <p key={index}>{disk.mount} ({(disk.total_bytes / 1024 / 1024 / 1024).toFixed(1)}GB)</p>
                             ))}
                         </div>
                     </ComponentCard>
@@ -129,7 +129,7 @@ export function DeviceInfo() {
                         <ComponentCard icon={<Gpu />} title="GPU">
                             <p className="text-lg font-semibold scroll-m-20 mt-2" title={gpu.name}>{gpu.name}</p>
                             <div className="mt-1">
-                                <p>{gpu.video_ram_mb / 1024 / 1024}GB</p>
+                                <p>{(gpu.video_ram_mb / 1000).toFixed(1)}GB</p>
                             </div>
                         </ComponentCard>
                     ))}
@@ -147,7 +147,7 @@ export function DeviceInfo() {
                             <div className="flex flex-col">
                                 <div className="flex"><span className="w-32">Device Name</span><span className="font-medium">{components.device.hostname}</span></div>
                                 <div className="flex"><span className="w-32">Processor</span><span className="font-medium">{components.cpu.name}</span></div>
-                                <div className="flex"><span className="w-32">RAM</span><span className="font-medium">{components.memory.total_bytes / 1024 / 1024 / 1024}GB</span></div>
+                                <div className="flex"><span className="w-32">RAM</span><span className="font-medium">{(components.memory.total_bytes / 1024 / 1024 / 1024).toFixed(1)}GB</span></div>
                             </div>
                         </div>
                     </div>
